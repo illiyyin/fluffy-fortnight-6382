@@ -1,9 +1,26 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
+import { gql,useQuery } from "@apollo/client";
+
+var query = gql`
+	query  {
+		Media(id: 15125, type: ANIME) {
+			id
+			title {
+				romaji
+				english
+				native
+			}
+		}
+	}
+`;
 
 function App() {
 	const [count, setCount] = useState(0);
+	const { loading, error, data } = useQuery(query)
+
+	console.log({loading,error,data})
 
 	return (
 		<div className="App">
