@@ -1,10 +1,14 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import { gql,useQuery } from "@apollo/client";
+import { Switch, Route } from "wouter";
+import { gql, useQuery } from "@apollo/client";
+import ListAnime from "./pages/ListAnime";
+import Navbar from "./components/nav/Navbar";
+import DetailAnime from "./pages/DetailAnime";
 
 var query = gql`
-	query  {
+	query {
 		Media(id: 15125, type: ANIME) {
 			id
 			title {
@@ -18,37 +22,22 @@ var query = gql`
 
 function App() {
 	const [count, setCount] = useState(0);
-	const { loading, error, data } = useQuery(query)
+	const { loading, error, data } = useQuery(query);
 
-	console.log({loading,error,data})
+	console.log({ loading, error, data });
 
 	return (
-		<div className="App">
-			<div>
-				<a href="https://vitejs.dev" target="_blank">
-					<img src="/vite.svg" className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://reactjs.org" target="_blank">
-					<img
-						src={reactLogo}
-						className="logo react"
-						alt="React logo"
-					/>
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</div>
+		<>
+			<Navbar />
+			<Switch>
+				<Route path="/">
+					<ListAnime />
+				</Route>
+				<Route path="/:idAnime">
+					<DetailAnime/>
+				</Route>
+			</Switch>
+		</>
 	);
 }
 
