@@ -6,6 +6,8 @@ import { gql, useQuery } from "@apollo/client";
 import ListAnime from "./pages/ListAnime";
 import Navbar from "./components/nav/Navbar";
 import DetailAnime from "./pages/DetailAnime";
+import ListCollection from "./pages/ListCollection";
+import DetailCollection from "./pages/DetailCollection";
 
 var query = gql`
 	query {
@@ -35,6 +37,12 @@ function App() {
 				</Route>
 				<Route path="/anime/:idAnime">
 					<DetailAnime/>
+				</Route>
+				<Route path="/collection">
+					<ListCollection/>
+				</Route>
+				<Route path="/collection/:idCollection">
+					<DetailCollection/>
 				</Route>
 			</Switch>
 		</>
