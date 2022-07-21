@@ -33,7 +33,7 @@ function App() {
 				<Route path="/">
 					<ListAnime />
 				</Route>
-				<Route path="/:idAnime">
+				<Route path="/anime/:idAnime">
 					<DetailAnime/>
 				</Route>
 			</Switch>

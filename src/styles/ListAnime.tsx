@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.div`
+	max-width: 1280px;
+	margin: 80px auto;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap:20px;
+
+	& > div{
+		cursor:pointer;
+	}
 `;
 
-
-
-export const CoverImage = styled.img`
-	width: 300px;
-	height: 337px;
-	object-fit: cover;
-`;

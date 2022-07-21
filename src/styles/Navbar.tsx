@@ -6,6 +6,15 @@ export const Parent = styled.div`
   left:0;
 	width: 100vw;
 	background-color: white;
+	& >ul{
+		list-style-type: none;
+		display:flex;
+		justify-content:flex-end;
+		padding:0 36px;
+	}
+	& > ul >li{
+		margin-right:24px;
+	}
 `;
 
 export const Button = styled.button`

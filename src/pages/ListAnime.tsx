@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery, gql } from "@apollo/client";
-import { Container, CoverImage } from "../styles/ListAnime";
+import { Container } from "../styles/ListAnime";
 import AnimeItem from "../components/AnimeItem";
 
 const query = gql`
@@ -19,27 +19,34 @@ const query = gql`
 				title {
 					romaji
 				}
-        coverImage {
-          extraLarge
-          large
-          medium
-          color
-        }
+				coverImage {
+					extraLarge
+				}
 			}
 		}
 	}
 `;
 
 export default function ListAnime() {
-  const [location, setLocation] = useLocation();
-  const [page,setPage]=useState(0)
-  
-  const {data,error} = useQuery(query,{variables:{page:page,perPage:10}})
-	console.log(location);
-	console.log(data)
-  return <Container>{data?.Page.media.map((item) => (
-    <AnimeItem cover={item.coverImage.extraLarge} title={item.title.romaji}/>
+	const [location, setLocation] = useLocation();
+	const [page, setPage] = useState(0);
 
-    
-  ))}</Container>;
+	const { data, error } = useQuery(query, {
+		variables: { page: page, perPage: 10 },
+	});
+	console.log(location);
+	console.log(data);
+	return (
+		<Container>
+			{data?.Page.media.map((item) => (
+				<div onClick={()=>setLocation("/anime/" + item.id)}>
+
+					<AnimeItem
+						cover={item.coverImage.extraLarge}
+						title={item.title.romaji}
+						/>
+				</div>
+			))}
+		</Container>
+	);
 }

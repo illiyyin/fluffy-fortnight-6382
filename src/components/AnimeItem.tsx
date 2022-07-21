@@ -1,11 +1,13 @@
 import React from 'react'
-import { CoverImage } from '../styles/ListAnime'
+import { CoverImage, Title } from '../styles/AnimeItem'
+import { useLocation } from 'wouter'
 
-export default function AnimeItem({cover,title}) {
+export default function AnimeItem({ cover, title }) {
+  
   return (
-    <div>
+    <div >
       <CoverImage src={cover} />
-      <h2>{title}</h2>
+      <Title>{title}</Title>
     </div>
   )
 }

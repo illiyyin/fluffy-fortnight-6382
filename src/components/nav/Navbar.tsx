@@ -6,7 +6,10 @@ import { Button, Parent } from "../../styles/Navbar";
 export default function Navbar() {
 	return (
 		<Parent>
-			<Button>Ini button</Button>
+			<ul>
+				<li>Home</li>
+				<li>Collection</li>
+			</ul>
 		</Parent>
 	);
 }
