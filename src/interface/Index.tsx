@@ -9,6 +9,10 @@ export interface IDetailAnime {
 		medium: string;
 	};
 }
+export interface IItemAnime{
+  cover: string
+  title:string
+}
 export interface ILocalData {
 	id: number;
 	name: string;
@@ -25,4 +29,11 @@ export interface IModal {
 	show: boolean;
 	setShow: (value: boolean) => void;
 	children: ReactNode;
+}
+
+export interface IPaginate {
+	setPerPage: (value: number) => void;
+	setPage: (value: number) => void;
+	page: number;
+	perPage: number;
 }

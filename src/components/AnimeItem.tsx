@@ -1,13 +1,13 @@
-import React from 'react'
-import { CoverImage, Title } from '../styles/AnimeItem'
-import { useLocation } from 'wouter'
+import React from "react";
+import { CoverImage, Title } from "../styles/AnimeItem";
+import { useLocation } from "wouter";
+import { IItemAnime } from "../interface/Index";
 
-export default function AnimeItem({ cover, title }) {
-  
-  return (
-    <div >
-      <CoverImage src={cover} />
-      <Title>{title}</Title>
-    </div>
-  )
+export default function AnimeItem({ cover, title }: IItemAnime) {
+	return (
+		<div>
+			<CoverImage src={cover} alt={title} loading="lazy" />
+			<Title>{title}</Title>
+		</div>
+	);
 }

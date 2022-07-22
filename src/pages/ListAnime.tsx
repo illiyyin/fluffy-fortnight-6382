@@ -5,6 +5,7 @@ import { Container, Grid } from "../styles/ListAnime";
 import AnimeItem from "../components/AnimeItem";
 import Paginate from "../components/Paginate";
 import { IDetailAnime } from "../interface/Index";
+import Loading from "../assets/loading.svg";
 
 const query = gql`
 	query ($page: Int, $perPage: Int) {
@@ -34,7 +35,7 @@ export default function ListAnime() {
 	const [page, setPage] = useState(1);
 	const [perPage, setPerPage] = useState(10);
 
-	const { data, error } = useQuery(query, {
+	const { data, loading } = useQuery(query, {
 		variables: { page: page, perPage: perPage },
 	});
 	return (
@@ -45,16 +46,20 @@ export default function ListAnime() {
 				setPage={setPage}
 				page={page}
 			/>
-			<Grid>
-				{data?.Page.media.map((item:IDetailAnime) => (
-					<div onClick={() => setLocation("/anime/" + item.id)}>
-						<AnimeItem
-							cover={item.coverImage.medium}
-							title={item.title.romaji}
-						/>
-					</div>
-				))}
-			</Grid>
+			{loading ? (
+				<img src={Loading} alt="loading" width={48} />
+			) : (
+				<Grid>
+					{data?.Page.media.map((item: IDetailAnime) => (
+						<div onClick={() => setLocation("/anime/" + item.id)} key={item.id}>
+							<AnimeItem
+								cover={item.coverImage.medium}
+								title={item.title.romaji}
+							/>
+						</div>
+					))}
+				</Grid>
+			)}
 		</Container>
 	);
 }

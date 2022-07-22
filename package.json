@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"test:gzip": "npx http-server dist --cors --gzip -c-1"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.6.9",
