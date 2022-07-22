@@ -8,8 +8,16 @@ export default function Navbar() {
 	return (
 		<Parent>
 			<ul>
-				<li onClick={() => setLocation("/")}>Home</li>
-				<li onClick={() => setLocation("/collection")}>Collection</li>
+				<li onClick={() => setLocation("/")}>
+					<Button route={location} path="/">
+						Home
+					</Button>
+				</li>
+				<li onClick={() => setLocation("/collection")}>
+					<Button route={location} path="/collection">
+						Collection
+					</Button>
+				</li>
 			</ul>
 		</Parent>
 	);

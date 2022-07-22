@@ -1,11 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery, gql } from "@apollo/client";
-import { Container, Header } from "../styles/DetailAnime";
+
+import {
+	ButtonAdd,
+	ButtonSave,
+	CollectionContainer,
+	Container,
+	ContainerAddNewCollection,
+	FooterModal,
+	Header,
+	InputName,
+	WarnText,
+} from "../styles/DetailAnime";
 import { CoverImage } from "../styles/AnimeItem";
+
 import Modal from "../components/Modal";
+
 import { AppContext } from "../context/AppContext";
 import { IContext, ILocalData } from "../interface/Index";
+import CollectionItem from "../components/animeDetail/CollectionItem";
 
 const query = gql`
 	query ($id: Int) {
@@ -23,15 +37,17 @@ const query = gql`
 `;
 
 export default function DetailAnime() {
-	const [location, setLocation] = useLocation();
 	const { datas, setDatas } = useContext<IContext>(AppContext);
-	const id = parseInt(location.replace("/anime/", ""));
-	const [collectionAdded, setCollectionAdded] = useState<ILocalData[]>([]);
 
+	const [location, setLocation] = useLocation();
+	const id = parseInt(location.replace("/anime/", ""));
+
+	const [collectionAdded, setCollectionAdded] = useState<ILocalData[]>([]);
 	const [selectCollection, setSelectCollection] = useState<number[]>([]);
+	const [name, setName] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openNewCollection, setOpenNewCollection] = useState(false);
-	const [name, setName] = useState("");
+	const [nameIsExist, setNameIsExist] = useState(true);
 
 	const { data } = useQuery(query, {
 		variables: { id: id },
@@ -39,9 +55,9 @@ export default function DetailAnime() {
 
 	useEffect(() => {
 		const newArr = datas.filter((item) =>
-			item.listId.some((num:number) => num == id)
+			item.listId.some((num: number) => num == id)
 		);
-		if(newArr)setCollectionAdded(newArr);
+		setCollectionAdded(newArr);
 	}, [datas]);
 
 	const handleAddToCollection = () => {
@@ -56,71 +72,91 @@ export default function DetailAnime() {
 			item.listId = [...new Set(item.listId)];
 			return item;
 		});
-		if(body) setDatas(body);
+		setDatas(body);
+		setOpen(false);
 	};
-	const handleAddNewCollection = () => {
+	const handleAddNewCollection = async() => {
 		const idList = Math.max(...datas.map((item) => item.id), 0);
-		const body = {
-			id: idList + 1,
-			cover: "",
-			name: name,
-			listId: [],
-		};
-		const arr = [...datas, body];
-		if(arr) setDatas(arr);
-		setName("");
-		setOpenNewCollection(false);
+		const nameList = datas.map((item) => item.name);
+
+		if (nameList.includes(name)) {
+			setNameIsExist(true);
+		} else {
+			const body = {
+				id: idList + 1,
+				cover: "",
+				name: name,
+				listId: [],
+			};
+			const arr = [...datas, body];
+
+			setDatas(arr);
+			setOpenNewCollection(false);
+			setName("");
+		}
 	};
+
+	const handleSelectCollection = (collectionId: number) => {
+		if (selectCollection.includes(collectionId))
+			setSelectCollection((prev) =>
+				prev.filter((val) => val != collectionId)
+			);
+		else setSelectCollection([...selectCollection, collectionId]);
+	};
+
 	return (
 		<Container>
-			<Modal show={open} setShow={setOpen}>
-				<button onClick={() => setOpenNewCollection(true)}>
-					Add New collection
-				</button>
-				list collection
-				{datas.map((item) => (
-					<div
-						onClick={() => {
-							if (selectCollection.includes(item.id)) {
-								setSelectCollection((prev) =>
-									prev.filter((val) => val != item.id)
-								);
-							} else {
-								setSelectCollection([
-									...selectCollection,
-									item.id,
-								]);
-							}
-						}}
+			<Modal
+				show={open}
+				setShow={setOpen}
+				header="Add anime to Collection"
+			>
+				<CollectionContainer>
+					{datas.map((item) => (
+						<div onClick={() => handleSelectCollection(item.id)}>
+							<CollectionItem
+								name={item.name}
+								selected={selectCollection.includes(item.id)}
+							/>
+						</div>
+					))}
+				</CollectionContainer>
+				<FooterModal>
+					<ButtonAdd onClick={() => setOpenNewCollection(true)}>
+						Add New Collection
+					</ButtonAdd>
+
+					<ButtonSave
+						onClick={handleAddToCollection}
+						disabled={selectCollection.length > 0 ? false : true}
 					>
-						{item.name}
-					</div>
-				))}
-				<button onClick={handleAddToCollection}>
-					Add to collection
-				</button>
+						Save
+					</ButtonSave>
+				</FooterModal>
 			</Modal>
 			<Modal setShow={setOpenNewCollection} show={openNewCollection}>
-				<div style={{ backgroundColor: "#ff6273" }}>
-					<input
+				<ContainerAddNewCollection>
+					<InputName
+						placeholder="Input Collection's name here"
 						type="text"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 					/>
-					modal new collection
-					<button onClick={handleAddNewCollection}>
-						Add New Collection
-					</button>
-				</div>
+					{nameIsExist && <WarnText>Collection Name is already exist, try another name</WarnText>}
+					<div>
+						<ButtonSave onClick={handleAddNewCollection}>
+							Add New Collection
+						</ButtonSave>
+					</div>
+				</ContainerAddNewCollection>
 			</Modal>
 			<Header bg={data?.Media.coverImage.color}>
 				{data?.Media.title.romaji}
 			</Header>
 			<CoverImage src={data?.Media.coverImage.large} />
-			ListAnime
 			{location}
 			<button onClick={() => setOpen(true)}>open</button>
-			collection :{" "}
+
 			{collectionAdded.map((item) => (
 				<div onClick={() => setLocation("/collection/" + item.id)}>
 					{item.name}

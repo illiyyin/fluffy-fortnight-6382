@@ -1,5 +1,5 @@
 import React from "react";
-import { IPaginate } from "../interface/Index";
+import { IPaginate } from "../../interface/Index";
 import {
 	Container,
 	ItemPage,
@@ -7,9 +7,9 @@ import {
 	PrevButton,
 	Pagination,
 	NextButton,
-} from "../styles/Paginate";
-import IconLeft from "./paginate/IconLeft";
-import IconRight from "./paginate/IconRight";
+} from "../../styles/Paginate";
+import IconLeft from "./IconLeft";
+import IconRight from "./IconRight";
 
 export default function Paginate({
 	setPerPage,

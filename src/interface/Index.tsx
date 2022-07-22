@@ -9,9 +9,9 @@ export interface IDetailAnime {
 		medium: string;
 	};
 }
-export interface IItemAnime{
-  cover: string
-  title:string
+export interface IItemAnime {
+	cover: string;
+	title: string;
 }
 export interface ILocalData {
 	id: number;
@@ -29,6 +29,7 @@ export interface IModal {
 	show: boolean;
 	setShow: (value: boolean) => void;
 	children: ReactNode;
+	header?: string;
 }
 
 export interface IPaginate {

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { IModal } from "../interface/Index";
+import { CloseArea, CloseButton, Container, ModalBox } from "../styles/Modal";
+import IconClose from "../assets/x.svg";
 
-export default function Modal({ show, setShow, children }: IModal) {
+export default function Modal({ show, setShow, children, header }: IModal) {
 	const [unmount, setUnmount] = useState(show);
 
 	useEffect(() => {
@@ -12,20 +14,19 @@ export default function Modal({ show, setShow, children }: IModal) {
 	return (
 		<>
 			{show && (
-				<div
-					style={{
-						position: "fixed",
-						pointerEvents: unmount ? "auto" : "none",
-						opacity: unmount ? "100%" : "0%",
-						backgroundColor: "#ff0000",
-						marginTop: "300px",
-						transition: "opacity 1s",
-						transitionDelay: "",
-					}}
-				>
-					<button onClick={() => setShow(false)}>close</button>
-					{children}
-				</div>
+				<Container unmount={unmount}>
+					<CloseArea onClick={() => setShow(false)} />
+					<ModalBox>
+						<h3>{header}</h3>
+						<CloseButton
+							onClick={() => setShow(false)}
+							aria-label="Close Modal"
+						>
+							<img src={IconClose} alt="icon-close" />
+						</CloseButton>
+						{children}
+					</ModalBox>
+				</Container>
 			)}
 		</>
 	);

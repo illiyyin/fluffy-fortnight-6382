@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useQuery, gql } from "@apollo/client";
 import { Container, Grid } from "../styles/ListAnime";
 import AnimeItem from "../components/AnimeItem";
-import Paginate from "../components/Paginate";
+import Paginate from "../components/paginate/Paginate";
 import { IDetailAnime } from "../interface/Index";
 import Loading from "../assets/loading.svg";
 

@@ -1,30 +1,32 @@
 import styled from "@emotion/styled";
 
 export const Parent = styled.div`
-  position:fixed;
-  top:0;
-  left:0;
+	position: fixed;
+	top: 0;
 	width: 100vw;
 	background-color: white;
-	& >ul{
+	overflow: hidden;
+	& > ul {
 		list-style-type: none;
-		display:flex;
-		justify-content:flex-end;
-		padding:0 36px;
-	}
-	& > ul >li{
-		margin-right:24px;
+		display: flex;
+		justify-content: flex-end;
+		padding: 0;
+		margin: 0;
+		margin-right: 24px;
 	}
 `;
 
-export const Button = styled.button`
-	padding: 32px;
-	background-color: hotpink;
-	font-size: 24px;
-	border-radius: 4px;
-	color: black;
-	font-weight: bold;
+export const Button = styled.button<{ route: string; path: string }>`
+	cursor: pointer;
+	padding: 16px 24px;
+	background-color: white;
+	border: 0;
+	border-bottom: solid 4px
+		${({ route, path }) => {
+			return route == path ? "#BDD0DB" : "white";
+		}};
+	font-size: 16px;
 	&:hover {
-		color: white;
+		background-color: #F2F6F8;
 	}
 `;
