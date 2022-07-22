@@ -6,7 +6,7 @@ import { IItemAnime } from "../interface/Index";
 export default function AnimeItem({ cover, title }: IItemAnime) {
 	return (
 		<div>
-			<CoverImage src={cover} alt={title} loading="lazy" />
+			<CoverImage src={cover} alt={title} />
 			<Title>{title}</Title>
 		</div>
 	);
