@@ -36,5 +36,12 @@ export default function DetailCollection() {
 		console.log(listId);
 	}, []);
 	console.log(data);
-	return <div style={{ marginTop: "86px" }}>detail collection</div>;
+	return (
+		<div style={{ marginTop: "86px" }}>
+			detail collection
+			{data?.Page.media.map((item) => (
+				<div>{item.title.romaji}</div>
+			))}
+		</div>
+	);
 }
