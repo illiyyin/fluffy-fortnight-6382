@@ -10,36 +10,13 @@ import ListCollection from "./pages/ListCollection";
 import DetailCollection from "./pages/DetailCollection";
 import { AppContext } from "./context/AppContext";
 
-var query = gql`
-	query {
-		Media(id: 15125, type: ANIME) {
-			id
-			title {
-				romaji
-				english
-				native
-			}
-		}
-	}
-`;
 
 function App() {
-	const [count, setCount] = useState(0);
-	// const { loading, error, data } = useQuery(query);
 	const [datas, setDatas] = useState(JSON.parse(localStorage.getItem("collection") || "[]"));
-	
-	// console.log({ loading, error, data })
-	// useEffect(() => {
-	// 	const storage = JSON.parse(localStorage.getItem("collection") || "[]");
-	// 	localStorage.setItem("collection", JSON.stringify(storage));
-	// 	setDatas(storage);
-	// }, []);
 
 	useEffect(() => {
-		// if (localStorage.getItem("collection"))
 			localStorage.setItem("collection", JSON.stringify(datas));
-	}, [datas, setDatas]);
-	console.log(datas);
+	}, [datas]);
 
 	return (
 		<>

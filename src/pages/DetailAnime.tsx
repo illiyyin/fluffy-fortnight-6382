@@ -5,6 +5,7 @@ import { Container, Header } from "../styles/DetailAnime";
 import { CoverImage } from "../styles/AnimeItem";
 import Modal from "../components/Modal";
 import { AppContext } from "../context/AppContext";
+import { IContext, ILocalData } from "../interface/Index";
 
 const query = gql`
 	query ($id: Int) {
@@ -23,13 +24,11 @@ const query = gql`
 
 export default function DetailAnime() {
 	const [location, setLocation] = useLocation();
-	const {datas,setDatas}=useContext(AppContext)
-	const id = location.replace("/anime/", "");
-	const [page, setPage] = useState(0);
-	const [collectionAdded, setCollectionAdded] = useState([]);
-	// const [listCollection, setListCollection] = useState([]);
+	const { datas, setDatas } = useContext<IContext>(AppContext);
+	const id = parseInt(location.replace("/anime/", ""));
+	const [collectionAdded, setCollectionAdded] = useState<ILocalData[]>([]);
 
-	const [selectCollection, setSelectCollection] = useState([]);
+	const [selectCollection, setSelectCollection] = useState<number[]>([]);
 	const [open, setOpen] = useState(false);
 	const [openNewCollection, setOpenNewCollection] = useState(false);
 	const [name, setName] = useState("");
@@ -39,18 +38,11 @@ export default function DetailAnime() {
 	});
 
 	useEffect(() => {
-		// const arr = JSON.parse(localStorage.getItem("collection") || "");
 		const newArr = datas.filter((item) =>
-			item.listId.some((num) => num == id)
+			item.listId.some((num:number) => num == id)
 		);
-
-		console.log(newArr);
-		// console.log(arr);
-		setCollectionAdded(newArr);
-		// setListCollection(arr);
+		if(newArr)setCollectionAdded(newArr);
 	}, [datas]);
-	// console.log(selectCollection);
-	// console.log(listCollection);
 
 	const handleAddToCollection = () => {
 		const body = datas.map((item) => {
@@ -58,19 +50,16 @@ export default function DetailAnime() {
 				item.cover = data?.Media.coverImage.large;
 			}
 			if (selectCollection.includes(item.id)) {
-				item.listId.push(parseInt(id));
+				item.listId.push(id);
 			}
 
 			item.listId = [...new Set(item.listId)];
 			return item;
 		});
-		setDatas(body)
-		// localStorage.setItem("collection", JSON.stringify(body));
-		// console.log(body);
-		
+		if(body) setDatas(body);
 	};
 	const handleAddNewCollection = () => {
-		const idList = Math.max(...datas.map((item) => item.id),0);
+		const idList = Math.max(...datas.map((item) => item.id), 0);
 		const body = {
 			id: idList + 1,
 			cover: "",
@@ -78,9 +67,7 @@ export default function DetailAnime() {
 			listId: [],
 		};
 		const arr = [...datas, body];
-		setDatas(arr);
-		// localStorage.setItem("collection", JSON.stringify(arr));
-		console.log(arr);
+		if(arr) setDatas(arr);
 		setName("");
 		setOpenNewCollection(false);
 	};

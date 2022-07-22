@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { IModal } from "../interface/Index";
 
-export default function Modal({ show, setShow, children }) {
+export default function Modal({ show, setShow, children }: IModal) {
 	const [unmount, setUnmount] = useState(show);
 
 	useEffect(() => {
@@ -8,7 +9,6 @@ export default function Modal({ show, setShow, children }) {
 			!show ? setUnmount(false) : setUnmount(true);
 		}, 200);
 	}, [show]);
-	// console.log({ show, unmount });
 	return (
 		<>
 			{show && (

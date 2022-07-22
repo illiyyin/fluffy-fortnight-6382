@@ -1,3 +1,3 @@
-import { createContext } from "react";
-
-export const AppContext = createContext(null)
+import { createContext, useState } from "react";
+import { IContext } from "../interface/Index";
+export const AppContext = createContext<IContext>({} as IContext);
