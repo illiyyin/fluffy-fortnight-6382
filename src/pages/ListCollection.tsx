@@ -1,34 +1,73 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState,useContext } from "react";
 import { useLocation } from "wouter";
+import Modal from "../components/Modal";
+import { AppContext } from "../context/AppContext";
 
-export default function ListCollection() {
+export default function datas() {
   const [location, setLocation] = useLocation();
-  const arr = [
-    {
-      id: 1,
-      cover: "",
-      name: "nama collect",
-      listId:[30,46]
-    },
-    {
-      id: 2,
-      cover: "",
-      name: "nama collect gada 46",
-      listId:[30]
-    },
-  ]
+  const {datas,setDatas}=useContext(AppContext)
+	const [open, setOpen] = useState(false);
+	const [name, setName] = useState("");
+	// const [datas, setListCollection] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem("collection",JSON.stringify(arr))
-  },[])
-  return (
-    <div style={{marginTop:'86px'}}>
-      List Collection
-      {arr.map(item => (
-        <div onClick={()=>setLocation("/collection/"+item.id)}>
-          <p>{item.name}</p>
-        </div>
-      ))}
-    </div>
-  )
+	// useEffect(() => {
+	// 	// localStorage.setItem("collection",JSON.stringify(arr))
+	// 	const arr = JSON.parse(localStorage.getItem("collection") || "");
+	 // 	// setListCollection(arr);
+  // }, []);
+  console.log(datas)
+
+	const handleAddNewCollection = () => {
+    const idList = Math.max(...datas.map((item) => item.id), 0);
+    console.log(idList)
+		const body = {
+			id: idList + 1,
+			cover: "",
+			name: name,
+			listId: [],
+		};
+    const arr = [...datas, body];
+    setDatas(arr)
+		// setListCollection(arr);
+		// localStorage.setItem("collection", JSON.stringify(arr));
+		console.log(arr);
+		setName("");
+		setOpen(false);
+	};
+	const deleteCollection = (collectionId) => {
+		const arr = datas.filter((item) => item.id != collectionId);
+    setDatas(arr)
+    
+    // setListCollection(arr);
+    // set
+		// localStorage.setItem("collection", JSON.stringify(arr));
+	};
+	return (
+    <div style={{ marginTop: "86px" }}>
+      
+			<Modal show={open} setShow={setOpen}>
+				<input
+					type="text"
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+				/>
+				<button onClick={handleAddNewCollection}>
+					Add new collection
+				</button>
+			</Modal>
+			<button onClick={() => setOpen(true)}>Create New Collection</button>
+			List Collection
+			{datas.map((item) => (
+				<div>
+					<img src={item.cover} />
+					<p onClick={() => setLocation("/collection/" + item.id)}>
+						{item.name}
+					</p>
+					<button onClick={() => deleteCollection(item.id)}>
+						hapuss
+					</button>
+				</div>
+			))}
+		</div>
+	);
 }
