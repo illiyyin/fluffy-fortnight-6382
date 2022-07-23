@@ -1,8 +1,10 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
+import AnimeItem from "../components/AnimeItem";
 import { AppContext } from "../context/AppContext";
 import { IDetailAnime } from "../interface/Index";
+import { Container, Grid } from "../styles/ListAnime";
 
 const query = gql`
 	query ($id: [Int]) {
@@ -13,10 +15,7 @@ const query = gql`
 					romaji
 				}
 				coverImage {
-					extraLarge
 					large
-					medium
-					color
 				}
 			}
 		}
@@ -33,17 +32,13 @@ export default function DetailCollection() {
 		variables: { id: id },
 	});
 	useEffect(() => {
-		// const arr = JSON.parse(localStorage.getItem("collection") || "");
-		// setDatas(arr);
 		const { listId } = datas.filter((item) => item.id == idCollection)[0];
 		setid(listId);
-		console.log(listId);
 	}, []);
 	const handleDelete = async (animeId: number) => {
 		const body = datas.map((item) => {
-			if (item.id == idCollection) {
+			if (item.id == idCollection)
 				item.listId = item.listId.filter((val) => val != animeId);
-			}
 
 			return item;
 		});
@@ -52,14 +47,25 @@ export default function DetailCollection() {
 		setid(id.filter((item) => item != animeId));
 	};
 	return (
-		<div style={{ marginTop: "86px" }}>
-			detail collection
-			{data?.Page.media.map((item: IDetailAnime) => (
-				<div>
-					{item.title.romaji}
-					<button onClick={() => handleDelete(item.id)}>Hapus</button>
-				</div>
-			))}
-		</div>
+		<Container style={{ marginTop: "86px" }}>
+			detail Collection
+			<Grid>
+				{data?.Page.media.map((item: IDetailAnime) => (
+					<div style={{ position: "relative" }}>
+						<div onClick={() => setLocation("/anime/" + item.id)}>
+							<AnimeItem
+								cover={item.coverImage.large}
+								title={item.title.romaji}
+							/>
+						</div>
+						<div style={{ position: "absolute", top: 0 }}>
+							<button onClick={() => handleDelete(item.id)}>
+								Hapus
+							</button>
+						</div>
+					</div>
+				))}
+			</Grid>
+		</Container>
 	);
 }

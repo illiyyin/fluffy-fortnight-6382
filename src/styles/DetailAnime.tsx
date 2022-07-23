@@ -9,10 +9,8 @@ export const Container = styled.div`
 
 export const Header = styled.div<{ bg: string }>`
 	background-color: ${({ bg }) => bg};
-	font-size: 24px;
-	font-weight: 700;
-	padding: 10px 0;
-	margin-bottom: 4px;
+	height:8px;
+	margin-bottom: 8px;
 `;
 
 export const CollectionItem = styled.div<{ selected: boolean }>`

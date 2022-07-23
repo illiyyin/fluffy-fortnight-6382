@@ -20,6 +20,7 @@ import Modal from "../components/Modal";
 import { AppContext } from "../context/AppContext";
 import { IContext, ILocalData } from "../interface/Index";
 import CollectionItem from "../components/animeDetail/CollectionItem";
+import AnimeDetail from "../components/animeDetail/AnimeDetail";
 
 const query = gql`
 	query ($id: Int) {
@@ -27,7 +28,13 @@ const query = gql`
 			id
 			title {
 				romaji
+				native
 			}
+			description
+			startDate {
+				year
+			}
+			status
 			coverImage {
 				large
 				color
@@ -49,7 +56,7 @@ export default function DetailAnime() {
 	const [openNewCollection, setOpenNewCollection] = useState(false);
 	const [warnNameCollection, setWarnNameCollection] = useState("");
 
-	const { data } = useQuery(query, {
+	const { data,loading } = useQuery(query, {
 		variables: { id: id },
 	});
 
@@ -81,7 +88,7 @@ export default function DetailAnime() {
 	const handleAddNewCollection = async () => {
 		const nameList = datas.map((item) => item.name);
 
-		if (/^\s+$/g.test(name)||name=="") {
+		if (/^\s+$/g.test(name) || name == "") {
 			setWarnNameCollection("Name can't be empty");
 			return;
 		}
@@ -167,18 +174,12 @@ export default function DetailAnime() {
 					</div>
 				</ContainerAddNewCollection>
 			</Modal>
-			<Header bg={data?.Media.coverImage.color}>
-				{data?.Media.title.romaji}
-			</Header>
-			<CoverImage src={data?.Media.coverImage.large} />
-			{location}
-			<button onClick={() => setOpen(true)}>open</button>
-
-			{collectionAdded.map((item) => (
-				<div onClick={() => setLocation("/collection/" + item.id)}>
-					{item.name}
-				</div>
-			))}
+			<AnimeDetail
+				loading={loading}
+				data={data?.Media}
+				collection={collectionAdded}
+				setOpenModal={setOpen}
+			/>
 		</Container>
 	);
 }

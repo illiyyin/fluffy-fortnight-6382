@@ -9,11 +9,13 @@ import DetailAnime from "./pages/DetailAnime";
 import ListCollection from "./pages/ListCollection";
 import DetailCollection from "./pages/DetailCollection";
 import { AppContext } from "./context/AppContext";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 
 function App() {
 	const [datas, setDatas] = useState(JSON.parse(localStorage.getItem("collection") || "[]"));
 
+	
 	useEffect(() => {
 			localStorage.setItem("collection", JSON.stringify(datas));
 	}, [datas]);

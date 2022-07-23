@@ -23,7 +23,7 @@ const query = gql`
 					romaji
 				}
 				coverImage {
-					medium
+					large
 				}
 			}
 		}
@@ -35,9 +35,10 @@ export default function ListAnime() {
 	const [page, setPage] = useState(1);
 	const [perPage, setPerPage] = useState(10);
 
-	const { data, loading } = useQuery(query, {
+	const { data, loading,error } = useQuery(query, {
 		variables: { page: page, perPage: perPage },
 	});
+	console.log(error)
 	return (
 		<Container>
 			<Paginate
@@ -53,7 +54,7 @@ export default function ListAnime() {
 					{data?.Page.media.map((item: IDetailAnime) => (
 						<div onClick={() => setLocation("/anime/" + item.id)} key={item.id}>
 							<AnimeItem
-								cover={item.coverImage.medium}
+								cover={item.coverImage.large}
 								title={item.title.romaji}
 							/>
 						</div>

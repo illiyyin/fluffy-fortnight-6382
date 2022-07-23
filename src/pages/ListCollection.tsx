@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { useLocation } from "wouter";
 import Modal from "../components/Modal";
 import { AppContext } from "../context/AppContext";
+import { Container, Grid } from "../styles/ListAnime";
+import CollectionItem from "../components/collectionList/CollectionItem"
 
 export default function datas() {
 	const [location, setLocation] = useLocation();
@@ -11,7 +13,6 @@ export default function datas() {
 
 	const handleAddNewCollection = () => {
 		const idList = Math.max(...datas.map((item) => item.id), 0);
-		console.log(idList);
 		const body = {
 			id: idList + 1,
 			cover: "",
@@ -24,35 +25,29 @@ export default function datas() {
 		setName("");
 		setOpen(false);
 	};
-	const deleteCollection = (collectionId: number) => {
-		const arr = datas.filter((item) => item.id != collectionId);
-		setDatas(arr);
-	};
 	return (
 		<div style={{ marginTop: "86px" }}>
-			<Modal show={open} setShow={setOpen}>
-				<input
-					type="text"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-				/>
-				<button onClick={handleAddNewCollection}>
-					Add new collection
-				</button>
-			</Modal>
-			<button onClick={() => setOpen(true)}>Create New Collection</button>
-			List Collection
-			{datas.map((item) => (
-				<div>
-					<img src={item.cover} />
-					<p onClick={() => setLocation("/collection/" + item.id)}>
-						{item.name}
-					</p>
-					<button onClick={() => deleteCollection(item.id)}>
-						hapuss
+			<Container>
+				<Modal show={open} setShow={setOpen}>
+					<input
+						type="text"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
+					<button onClick={handleAddNewCollection}>
+						Add new collection
 					</button>
-				</div>
-			))}
+				</Modal>
+				<p>List Collection</p>
+				<button onClick={() => setOpen(true)}>
+					Create New Collection
+				</button>
+				<Grid style={{ display: "grid" }}>
+					{datas.map((item) => (
+						<CollectionItem item={item} />
+					))}
+				</Grid>
+			</Container>
 		</div>
 	);
 }

@@ -4,9 +4,13 @@ export interface IDetailAnime {
 	id: number;
 	title: {
 		romaji: string;
+		native: string;
 	};
+	description: string;
 	coverImage: {
 		medium: string;
+		large: string;
+		color: string;
 	};
 }
 export interface IItemAnime {
