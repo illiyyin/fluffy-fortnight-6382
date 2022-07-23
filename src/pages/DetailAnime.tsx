@@ -47,7 +47,7 @@ export default function DetailAnime() {
 	const [name, setName] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openNewCollection, setOpenNewCollection] = useState(false);
-	const [nameIsExist, setNameIsExist] = useState(true);
+	const [warnNameCollection, setWarnNameCollection] = useState("");
 
 	const { data } = useQuery(query, {
 		variables: { id: id },
@@ -60,14 +60,16 @@ export default function DetailAnime() {
 		setCollectionAdded(newArr);
 	}, [datas]);
 
+	useEffect(() => {
+		setWarnNameCollection("");
+	}, [openNewCollection]);
+
 	const handleAddToCollection = () => {
 		const body = datas.map((item) => {
-			if (item.listId.length == 0 && selectCollection.includes(item.id)) {
+			if (item.listId.length == 0 && selectCollection.includes(item.id))
 				item.cover = data?.Media.coverImage.large;
-			}
-			if (selectCollection.includes(item.id)) {
-				item.listId.push(id);
-			}
+
+			if (selectCollection.includes(item.id)) item.listId.push(id);
 
 			item.listId = [...new Set(item.listId)];
 			return item;
@@ -75,25 +77,38 @@ export default function DetailAnime() {
 		setDatas(body);
 		setOpen(false);
 	};
-	const handleAddNewCollection = async() => {
-		const idList = Math.max(...datas.map((item) => item.id), 0);
+
+	const handleAddNewCollection = async () => {
 		const nameList = datas.map((item) => item.name);
 
-		if (nameList.includes(name)) {
-			setNameIsExist(true);
-		} else {
-			const body = {
-				id: idList + 1,
-				cover: "",
-				name: name,
-				listId: [],
-			};
-			const arr = [...datas, body];
-
-			setDatas(arr);
-			setOpenNewCollection(false);
-			setName("");
+		if (/^\s+$/g.test(name)||name=="") {
+			setWarnNameCollection("Name can't be empty");
+			return;
 		}
+
+		if (nameList.includes(name)) {
+			setWarnNameCollection("Name already occupied");
+			return;
+		}
+
+		if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g.test(name)) {
+			setWarnNameCollection("Put name only using word and/or number");
+			return;
+		}
+
+		const numID = Math.max(...datas.map((item) => item.id), 0);
+
+		const body = {
+			id: numID + 1,
+			cover: "",
+			name: name,
+			listId: [],
+		};
+		const arr = [...datas, body];
+
+		setDatas(arr);
+		setOpenNewCollection(false);
+		setName("");
 	};
 
 	const handleSelectCollection = (collectionId: number) => {
@@ -142,7 +157,9 @@ export default function DetailAnime() {
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 					/>
-					{nameIsExist && <WarnText>Collection Name is already exist, try another name</WarnText>}
+					{warnNameCollection.length > 0 && (
+						<WarnText>{warnNameCollection}</WarnText>
+					)}
 					<div>
 						<ButtonSave onClick={handleAddNewCollection}>
 							Add New Collection
