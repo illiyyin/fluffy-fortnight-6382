@@ -5,11 +5,12 @@ export const Container = styled.div`
 	margin: 80px auto;
 	display: flex;
 	flex-direction: column;
+	padding: 8px;
 `;
 
 export const Header = styled.div<{ bg: string }>`
 	background-color: ${({ bg }) => bg};
-	height:8px;
+	height: 8px;
 	margin-bottom: 8px;
 `;
 
@@ -86,5 +87,63 @@ export const InputName = styled.input`
 `;
 export const WarnText = styled.p`
 	color: red;
-  font-size:14px;
+	font-size: 14px;
+`;
+
+export const ButtonAddCollection = styled.button`
+	width: 100%;
+	max-width: 300px;
+	border: 0;
+	border-radius: 4px;
+	padding: 8px;
+	color: white;
+	font-size: 16px;
+	cursor: pointer;
+	background-color: #01baef;
+	&:hover {
+		background-color: #019fcb;
+	}
+`;
+
+export const ListCollection = styled.div`
+	margin-top: 16px;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+`;
+export const CollectionName = styled.div`
+	background-color: #f2f6f8;
+	margin-right: 4px;
+	margin-top: 4px;
+	padding: 8px;
+	border-radius: 4px;
+	cursor: pointer;
+	& > p {
+		margin: 0;
+	}
+`;
+
+export const AsideAnime = styled.div`
+	max-width: 300px;
+	width: 100%;
+	margin-bottom: 24px;
+`;
+
+export const ContainerDetailAnime = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	@media (min-width: 900px) {
+		flex-direction: row;
+		align-items: start;
+	}
+`;
+export const GridDetails = styled.div`
+	display: grid;
+	grid-template-columns: 200px auto;
+	& > p,
+	h4 {
+		margin: 4px;
+	}
 `;

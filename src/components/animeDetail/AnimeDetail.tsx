@@ -1,36 +1,54 @@
 import React from "react";
+import { useLocation } from "wouter";
 import { IDetailAnime, ILocalData } from "../../interface/Index";
 import { CoverImage } from "../../styles/AnimeItem";
-import { Header } from "../../styles/DetailAnime";
-import Skeleton from "react-loading-skeleton";
+import {
+	AsideAnime,
+	ButtonAddCollection,
+	CollectionName,
+	ContainerDetailAnime,
+	Header,
+	ListCollection,
+	GridDetails,
+} from "../../styles/DetailAnime";
 
 export default function AnimeDetail({
 	data,
 	setOpenModal,
 	collection,
-	loading,
 }: {
 	data: IDetailAnime;
 	collection: ILocalData[];
 	setOpenModal: (value: boolean) => void;
-}) {
-  console.log(collection);
-  console.log((new Array(4)).fill(0))
-
-	if (loading) return <Skeleton />;
+  }) {
+  
+    const [location, setLocation] = useLocation();
+	console.log(collection);
+	console.log(new Array(4).fill(0));
 
 	return (
-		<div style={{ display: "flex" }}>
-			<div>
+		<ContainerDetailAnime>
+			<AsideAnime>
 				<CoverImage src={data?.coverImage.large} />
-				<button
-					style={{ width: "100%" }}
-					onClick={() => setOpenModal(true)}
-				>
+				<ButtonAddCollection onClick={() => setOpenModal(true)}>
 					Add to Collection
-				</button>
-				{collection.length > 0 ? "ini kalo ada " : "collection kosong"}
-			</div>
+				</ButtonAddCollection>
+
+				{collection.length > 0 ? (
+					<>
+						<p>This anime exist in these collection :</p>
+						<ListCollection>
+							{collection.map((item) => (
+								<CollectionName onClick={()=>setLocation("/collection/"+item.id)}>
+									<p>{item.name}</p>
+								</CollectionName>
+							))}
+						</ListCollection>
+					</>
+				) : (
+					<p>This anime haven't added to any collection</p>
+				)}
+			</AsideAnime>
 			<div
 				style={{
 					display: "flex",
@@ -42,14 +60,10 @@ export default function AnimeDetail({
 			>
 				<Header bg={data?.coverImage.color} />
 				<h2>{data?.title.romaji}</h2>
-				<h4>{data?.title.native}</h4>
-				<div
-					style={{
-						display: "grid",
-						gridTemplateColumns: "200px auto",
-					}}
-				>
-					<p>nama</p>
+				<GridDetails>
+					<p>Native Name</p>
+					<h4>{data?.title.native}</h4>
+					<p>Released Year</p>
 					<p>{data?.startDate.year}</p>
 					<p>status</p>
 					<p>{data?.status}</p>
@@ -61,8 +75,8 @@ export default function AnimeDetail({
 					>
 						{}
 					</p>
-				</div>
+				</GridDetails>
 			</div>
-		</div>
+		</ContainerDetailAnime>
 	);
 }

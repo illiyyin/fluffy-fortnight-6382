@@ -6,6 +6,7 @@ export const Parent = styled.div`
 	width: 100vw;
 	background-color: white;
 	overflow: hidden;
+	z-index: 50;
 	& > ul {
 		list-style-type: none;
 		display: flex;
@@ -27,6 +28,6 @@ export const Button = styled.button<{ route: string; path: string }>`
 		}};
 	font-size: 16px;
 	&:hover {
-		background-color: #F2F6F8;
+		background-color: #f2f6f8;
 	}
 `;

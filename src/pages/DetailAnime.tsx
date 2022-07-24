@@ -56,7 +56,7 @@ export default function DetailAnime() {
 	const [openNewCollection, setOpenNewCollection] = useState(false);
 	const [warnNameCollection, setWarnNameCollection] = useState("");
 
-	const { data,loading } = useQuery(query, {
+	const { data, loading } = useQuery(query, {
 		variables: { id: id },
 	});
 
@@ -116,6 +116,7 @@ export default function DetailAnime() {
 		setDatas(arr);
 		setOpenNewCollection(false);
 		setName("");
+		setSelectCollection([])
 	};
 
 	const handleSelectCollection = (collectionId: number) => {
@@ -134,14 +135,22 @@ export default function DetailAnime() {
 				header="Add anime to Collection"
 			>
 				<CollectionContainer>
-					{datas.map((item) => (
-						<div onClick={() => handleSelectCollection(item.id)}>
-							<CollectionItem
-								name={item.name}
-								selected={selectCollection.includes(item.id)}
-							/>
-						</div>
-					))}
+					{datas.length > 0 ? (
+						datas.map((item) => (
+							<div
+								onClick={() => handleSelectCollection(item.id)}
+							>
+								<CollectionItem
+									name={item.name}
+									selected={selectCollection.includes(
+										item.id
+									)}
+								/>
+							</div>
+						))
+					) : (
+						<p>You dont have any collection</p>
+					)}
 				</CollectionContainer>
 				<FooterModal>
 					<ButtonAdd onClick={() => setOpenNewCollection(true)}>
