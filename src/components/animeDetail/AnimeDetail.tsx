@@ -53,15 +53,15 @@ export default function AnimeDetail({
 			</AsideAnime>
 			<DetailAnime>
 				<Header bg={data.coverImage.color} />
-				<h2>{data.title.romaji}</h2>
+				<h1>{data.title.romaji}</h1>
 				<GridDetails>
-					<p>Native Name</p>
-					<h4>{data.title.native}</h4>
-					<p>Released Year</p>
+					<h3>Native Name</h3>
+					<p>{data.title.native}</p>
+					<h3>Released Year</h3>
 					<p>{data.startDate.year}</p>
-					<p>status</p>
+					<h3>Status</h3>
 					<p>{data.status}</p>
-					<p>desc</p>
+					<h3>Description</h3>
 					<p
 						dangerouslySetInnerHTML={{
 							__html: data.description,

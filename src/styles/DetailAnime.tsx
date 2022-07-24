@@ -134,6 +134,9 @@ export const DetailAnime = styled.div`
 	width: 100%;
 	text-align: left;
 	margin-left: 0;
+	&>h1{
+		line-height:1.2;
+	}
 	@media (min-width: 900px) {
 		margin-left: 8px;
 	}
@@ -151,10 +154,14 @@ export const ContainerDetailAnime = styled.div`
 `;
 export const GridDetails = styled.div`
 	display: grid;
-	grid-template-columns: 200px auto;
-	gap:8px;
+	grid-template-columns: auto;
+	
 	& > p,
-	h4 {
+	h3 {
 		margin: 4px;
+	}
+	@media (min-width: 900px) {
+		gap: 8px;
+		grid-template-columns: 200px auto;
 	}
 `;
