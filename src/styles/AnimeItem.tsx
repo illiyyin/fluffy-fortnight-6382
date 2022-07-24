@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 
 export const AnimeItem = styled.div`
 	display: block;
+	border-radius:8px;
+	overflow:hidden;
 	& > div > h2 {
 		margin: 8px 0;
 	}

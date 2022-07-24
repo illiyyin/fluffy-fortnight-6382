@@ -10,6 +10,7 @@ import {
 	Header,
 	ListCollection,
 	GridDetails,
+	DetailAnime,
 } from "../../styles/DetailAnime";
 
 export default function AnimeDetail({
@@ -20,16 +21,13 @@ export default function AnimeDetail({
 	data: IDetailAnime;
 	collection: ILocalData[];
 	setOpenModal: (value: boolean) => void;
-  }) {
-  
-    const [location, setLocation] = useLocation();
-	console.log(collection);
-	console.log(new Array(4).fill(0));
+}) {
+	const [location, setLocation] = useLocation();
 
 	return (
 		<ContainerDetailAnime>
 			<AsideAnime>
-				<CoverImage src={data?.coverImage.large} />
+				<CoverImage src={data.coverImage.large} />
 				<ButtonAddCollection onClick={() => setOpenModal(true)}>
 					Add to Collection
 				</ButtonAddCollection>
@@ -39,7 +37,11 @@ export default function AnimeDetail({
 						<p>This anime exist in these collection :</p>
 						<ListCollection>
 							{collection.map((item) => (
-								<CollectionName onClick={()=>setLocation("/collection/"+item.id)}>
+								<CollectionName
+									onClick={() =>
+										setLocation("/collection/" + item.id)
+									}
+								>
 									<p>{item.name}</p>
 								</CollectionName>
 							))}
@@ -49,34 +51,26 @@ export default function AnimeDetail({
 					<p>This anime haven't added to any collection</p>
 				)}
 			</AsideAnime>
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					width: "100%",
-					marginLeft: "8px",
-					textAlign: "left",
-				}}
-			>
-				<Header bg={data?.coverImage.color} />
-				<h2>{data?.title.romaji}</h2>
+			<DetailAnime>
+				<Header bg={data.coverImage.color} />
+				<h2>{data.title.romaji}</h2>
 				<GridDetails>
 					<p>Native Name</p>
-					<h4>{data?.title.native}</h4>
+					<h4>{data.title.native}</h4>
 					<p>Released Year</p>
-					<p>{data?.startDate.year}</p>
+					<p>{data.startDate.year}</p>
 					<p>status</p>
-					<p>{data?.status}</p>
+					<p>{data.status}</p>
 					<p>desc</p>
 					<p
 						dangerouslySetInnerHTML={{
-							__html: data?.description,
+							__html: data.description,
 						}}
 					>
 						{}
 					</p>
 				</GridDetails>
-			</div>
+			</DetailAnime>
 		</ContainerDetailAnime>
 	);
 }

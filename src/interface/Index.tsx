@@ -7,6 +7,10 @@ export interface IDetailAnime {
 		native: string;
 	};
 	description: string;
+	startDate: {
+		year: string;
+	};
+	status: string;
 	coverImage: {
 		medium: string;
 		large: string;
@@ -41,4 +45,15 @@ export interface IPaginate {
 	setPage: (value: number) => void;
 	page: number;
 	perPage: number;
+}
+export interface IDelete {
+	title: string;
+	id: number;
+}
+
+export interface IAddCollection {
+	setOpen: (value: boolean) => void;
+	setName: (value: string) => void;
+	open: boolean;
+	name: string;
 }

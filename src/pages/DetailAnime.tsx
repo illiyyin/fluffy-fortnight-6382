@@ -21,6 +21,8 @@ import { AppContext } from "../context/AppContext";
 import { IContext, ILocalData } from "../interface/Index";
 import CollectionItem from "../components/animeDetail/CollectionItem";
 import AnimeDetail from "../components/animeDetail/AnimeDetail";
+import SkeletonAnimeDetail from "../components/animeDetail/SkeletonAnimeDetail";
+import ModalAddCollection from "../components/ModalAddCollection";
 
 const query = gql`
 	query ($id: Int) {
@@ -116,7 +118,7 @@ export default function DetailAnime() {
 		setDatas(arr);
 		setOpenNewCollection(false);
 		setName("");
-		setSelectCollection([])
+		setSelectCollection([]);
 	};
 
 	const handleSelectCollection = (collectionId: number) => {
@@ -165,30 +167,21 @@ export default function DetailAnime() {
 					</ButtonSave>
 				</FooterModal>
 			</Modal>
-			<Modal setShow={setOpenNewCollection} show={openNewCollection}>
-				<ContainerAddNewCollection>
-					<InputName
-						placeholder="Input Collection's name here"
-						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
-					{warnNameCollection.length > 0 && (
-						<WarnText>{warnNameCollection}</WarnText>
-					)}
-					<div>
-						<ButtonSave onClick={handleAddNewCollection}>
-							Add New Collection
-						</ButtonSave>
-					</div>
-				</ContainerAddNewCollection>
-			</Modal>
-			<AnimeDetail
-				loading={loading}
-				data={data?.Media}
-				collection={collectionAdded}
-				setOpenModal={setOpen}
+			<ModalAddCollection
+				setOpen={setOpenNewCollection}
+				open={openNewCollection}
+				name={name}
+				setName={setName}
 			/>
+			{loading ? (
+				<SkeletonAnimeDetail />
+			) : (
+				<AnimeDetail
+					data={data?.Media}
+					collection={collectionAdded}
+					setOpenModal={setOpen}
+				/>
+			)}
 		</Container>
 	);
 }

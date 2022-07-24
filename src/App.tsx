@@ -1,28 +1,26 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { Switch, Route } from "wouter";
-import { gql, useQuery } from "@apollo/client";
 import ListAnime from "./pages/ListAnime";
 import Navbar from "./components/nav/Navbar";
 import DetailAnime from "./pages/DetailAnime";
 import ListCollection from "./pages/ListCollection";
 import DetailCollection from "./pages/DetailCollection";
 import { AppContext } from "./context/AppContext";
-import 'react-loading-skeleton/dist/skeleton.css'
-
+import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
-	const [datas, setDatas] = useState(JSON.parse(localStorage.getItem("collection") || "[]"));
+	const [datas, setDatas] = useState(
+		JSON.parse(localStorage.getItem("collection") || "[]")
+	);
 
-	
 	useEffect(() => {
-			localStorage.setItem("collection", JSON.stringify(datas));
+		localStorage.setItem("collection", JSON.stringify(datas));
 	}, [datas]);
 
 	return (
 		<>
-			<AppContext.Provider value={{ datas, setDatas}}>
+			<AppContext.Provider value={{ datas, setDatas }}>
 				<Navbar />
 				<Switch>
 					<Route path="/">

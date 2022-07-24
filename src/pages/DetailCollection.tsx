@@ -2,9 +2,12 @@ import { gql, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import AnimeItem from "../components/AnimeItem";
+import SkeletonAnimeList from "../components/animeList/SkeletonAnimeList";
+import Button from "../components/DeleteButton";
 import Modal from "../components/Modal";
 import { AppContext } from "../context/AppContext";
-import { IDetailAnime } from "../interface/Index";
+import { IDelete, IDetailAnime } from "../interface/Index";
+import { ButtonSave } from "../styles/DetailAnime";
 import { Container, Grid } from "../styles/ListAnime";
 
 const query = gql`
@@ -28,14 +31,16 @@ export default function DetailCollection() {
 	const [id, setid] = useState<number[]>([]);
 	const idCollection = parseInt(location.replace("/collection/", ""));
 	const [open, setOpen] = useState(false);
-	const [deleteData, setDeleteData] = useState({});
-	// const [listCollection, setListCollection] = useState([]);
+	const [deleteData, setDeleteData] = useState<IDelete>({} as IDelete);
+	const [name, setName] = useState("");
 
-	const { data, error } = useQuery(query, {
+	const { data, error, loading } = useQuery(query, {
 		variables: { id: id },
 	});
 	useEffect(() => {
 		const { listId } = datas.filter((item) => item.id == idCollection)[0];
+		const collectionName = datas.filter((item) => item.id == idCollection);
+		setName(collectionName[0].name);
 		setid(listId);
 	}, []);
 	const handleDelete = async (animeId: number) => {
@@ -51,7 +56,7 @@ export default function DetailCollection() {
 		setOpen(false);
 	};
 
-	const handleShowModal = (id, title) => {
+	const handleShowModal = (id: number, title: string) => {
 		const body = {
 			id: id,
 			title: title,
@@ -61,49 +66,53 @@ export default function DetailCollection() {
 	};
 
 	return (
-		<Container style={{ marginTop: "86px" }}>
-			<Modal
-				header={`Are You sure want to delete ${deleteData.title} from this collection?`}
-				show={open}
-				setShow={setOpen}
-			>
-				<div>
-					<button onClick={() => handleDelete(deleteData.id)}>
-						Yes
-					</button>
-				</div>
-			</Modal>
-			detail Collection
-			<Grid>
-				{id.length > 0 ? (
-					data?.Page.media.map((item: IDetailAnime) => (
-						<div style={{ position: "relative" }}>
-							<div
-								onClick={() => setLocation("/anime/" + item.id)}
-							>
-								<AnimeItem
-									cover={item.coverImage.large}
-									title={item.title.romaji}
-								/>
-							</div>
-							<div style={{ position: "absolute", top: 0 }}>
-								<button
-									onClick={() =>
-										handleShowModal(
-											item.id,
-											item.title.romaji
-										)
-									}
-								>
-									Hapus
-								</button>
-							</div>
-						</div>
-					))
-				) : (
-					<p>You dont have any anime list in this collection</p>
-				)}
-			</Grid>
-		</Container>
+		<>
+			{loading ? (
+				<SkeletonAnimeList />
+			) : (
+					<Container>
+						
+					<Modal
+						header={`Are You sure want to delete ${deleteData.title} from this collection?`}
+						show={open}
+						setShow={setOpen}
+					>
+							<ButtonSave onClick={() => handleDelete(deleteData.id)}>
+								Yes
+							</ButtonSave>
+					</Modal>
+					<h2>{name + " Collection"}</h2>
+					{id.length > 0 ? (
+						<Grid>
+							{data?.Page.media.map((item: IDetailAnime) => (
+								<div style={{ position: "relative" }}>
+									<div
+										onClick={() =>
+											setLocation("/anime/" + item.id)
+										}
+									>
+										<AnimeItem
+											cover={item.coverImage.large}
+											title={item.title.romaji}
+										/>
+									</div>
+									<Button
+										onClick={() =>
+											handleShowModal(
+												item.id,
+												item.title.romaji
+											)
+										}
+										title="Delete Anime"
+									/>
+								</div>
+							))}
+						</Grid>
+					) : (
+						<p>You dont have any anime list in this collection</p>
+					)}
+				</Container>
+			)}
+		</>
 	);
 }

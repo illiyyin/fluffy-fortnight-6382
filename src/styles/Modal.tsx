@@ -9,7 +9,6 @@ export const Container = styled.div<{ unmount: boolean }>`
 	z-index:100;
 	top: 0;
 	left: 0;
-	pointer-events: ${({ unmount }) => (unmount ? "auto" : "none")};
 	opacity: ${({ unmount }) => (unmount ? "100%" : "0%")};
 	
 	transition: opacity 1s;
@@ -24,6 +23,7 @@ position: fixed;
 	top: 0;
 	left: 0;
   background-color: rgba(0, 0, 0, 0.42);
+	cursor:pointer;
 `
 
 export const ModalBox = styled.div`
@@ -52,3 +52,7 @@ export const CloseButton = styled.button`
 		background-color: #F2F6F8;
 	}
 `;
+
+export const CancelButton = styled.button`
+	
+`
