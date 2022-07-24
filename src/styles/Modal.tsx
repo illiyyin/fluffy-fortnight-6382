@@ -6,6 +6,7 @@ export const Container = styled.div<{ unmount: boolean }>`
 	align-items: center;
 	height: 100vh;
 	width: 100vw;
+	z-index:100;
 	top: 0;
 	left: 0;
 	pointer-events: ${({ unmount }) => (unmount ? "auto" : "none")};

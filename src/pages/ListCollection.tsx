@@ -43,9 +43,9 @@ export default function datas() {
 					Create New Collection
 				</button>
 				<Grid style={{ display: "grid" }}>
-					{datas.map((item) => (
+					{datas.length>0?datas.map((item) => (
 						<CollectionItem item={item} />
-					))}
+					)):<p>You dont have any collection</p>}
 				</Grid>
 			</Container>
 		</div>

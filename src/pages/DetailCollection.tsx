@@ -2,6 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import AnimeItem from "../components/AnimeItem";
+import Modal from "../components/Modal";
 import { AppContext } from "../context/AppContext";
 import { IDetailAnime } from "../interface/Index";
 import { Container, Grid } from "../styles/ListAnime";
@@ -26,6 +27,8 @@ export default function DetailCollection() {
 	const { datas, setDatas } = useContext(AppContext);
 	const [id, setid] = useState<number[]>([]);
 	const idCollection = parseInt(location.replace("/collection/", ""));
+	const [open, setOpen] = useState(false);
+	const [deleteData, setDeleteData] = useState({});
 	// const [listCollection, setListCollection] = useState([]);
 
 	const { data, error } = useQuery(query, {
@@ -45,26 +48,61 @@ export default function DetailCollection() {
 
 		setDatas(body);
 		setid(id.filter((item) => item != animeId));
+		setOpen(false);
 	};
+
+	const handleShowModal = (id, title) => {
+		const body = {
+			id: id,
+			title: title,
+		};
+		setDeleteData(body);
+		setOpen(true);
+	};
+
 	return (
 		<Container style={{ marginTop: "86px" }}>
+			<Modal
+				header={`Are You sure want to delete ${deleteData.title} from this collection?`}
+				show={open}
+				setShow={setOpen}
+			>
+				<div>
+					<button onClick={() => handleDelete(deleteData.id)}>
+						Yes
+					</button>
+				</div>
+			</Modal>
 			detail Collection
 			<Grid>
-				{data?.Page.media.map((item: IDetailAnime) => (
-					<div style={{ position: "relative" }}>
-						<div onClick={() => setLocation("/anime/" + item.id)}>
-							<AnimeItem
-								cover={item.coverImage.large}
-								title={item.title.romaji}
-							/>
+				{id.length > 0 ? (
+					data?.Page.media.map((item: IDetailAnime) => (
+						<div style={{ position: "relative" }}>
+							<div
+								onClick={() => setLocation("/anime/" + item.id)}
+							>
+								<AnimeItem
+									cover={item.coverImage.large}
+									title={item.title.romaji}
+								/>
+							</div>
+							<div style={{ position: "absolute", top: 0 }}>
+								<button
+									onClick={() =>
+										handleShowModal(
+											item.id,
+											item.title.romaji
+										)
+									}
+								>
+									Hapus
+								</button>
+							</div>
 						</div>
-						<div style={{ position: "absolute", top: 0 }}>
-							<button onClick={() => handleDelete(item.id)}>
-								Hapus
-							</button>
-						</div>
-					</div>
-				))}
+					))
+				) : (
+					<p>You dont have any anime list in this collection</p>
+				)}
 			</Grid>
 		</Container>
 	);
